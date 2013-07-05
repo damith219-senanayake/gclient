@@ -88,6 +88,10 @@ public class Gclient extends Observable implements Observer, Runnable {
     Dijkstra pathfinder;
     int prev, cur;
 
+    public void shooter(){
+        
+    }
+    
     public ArrayList<Integer> fillarray_I(ArrayList<Integer> ar, String st) {
         String[] temp = st.split("#")[0].split(";");
         for (int i = 0; i < temp.length; i++) {
