@@ -25,7 +25,7 @@ public class GServer extends Observable implements Runnable {
         try {
             ss = new ServerSocket(7000);
         } catch (IOException ex) {
-            System.out.println("FUCK");        }
+            System.out.println("Error Establishing New Server Connection");        }
     }
     @Override
     public void run() {
@@ -42,7 +42,7 @@ public class GServer extends Observable implements Runnable {
                    
                 }
             } catch (IOException ex) {
-                System.out.println("FUCK MORE");            }
+                System.out.println("Input Output Error at Server Connection");            }
 
         }
     }

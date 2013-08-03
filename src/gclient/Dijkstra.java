@@ -39,6 +39,7 @@ public class Dijkstra {
     char[][] map;
     int[] pred, dist;
     ArrayList<node> Q;
+    ArrayList<Integer> PPoss;
 
     public Dijkstra(int size, int dir, char[][] map) {
         sz = size;
@@ -85,11 +86,11 @@ public class Dijkstra {
             removeNode(u, Q);
             if (u.dist == Integer.MAX_VALUE) {
                 System.out.println("Unreachable");
-                break;
+                return pred;
             } else {
                 if (u.Pos() / sz != 0) {
                     int v = u.Pos() - sz;
-                    if (map[v / sz][v % sz] == 'n') {
+                    if (map[v / sz][v % sz] == 'n' && !PPoss.contains(v)) {
                         int alt = dist[u.Pos()] + 1;
                         if (alt < dist[v]) {
                             dist[v] = alt;
@@ -100,7 +101,7 @@ public class Dijkstra {
                 }
                 if (u.Pos() / sz < (sz - 1)) {
                     int v = u.Pos() + sz;
-                    if (map[v / sz][v % sz] == 'n') {
+                    if (map[v / sz][v % sz] == 'n'&& !PPoss.contains(v)) {
                         int alt = dist[u.Pos()] + 1;
                         if (alt < dist[v]) {
                             dist[v] = alt;
@@ -111,7 +112,7 @@ public class Dijkstra {
                 }
                 if (u.Pos() % sz != 0) {
                     int v = u.Pos() - 1;
-                    if (map[v / sz][v % sz] == 'n') {
+                    if (map[v / sz][v % sz] == 'n'&& !PPoss.contains(v)) {
                         int alt = dist[u.Pos()] + 1;
                         if (alt < dist[v]) {
                             dist[v] = alt;
@@ -122,7 +123,7 @@ public class Dijkstra {
                 }
                 if (u.Pos() % sz != (sz - 1)) {
                     int v = u.Pos() + 1;
-                    if (map[v / sz][v % sz] == 'n') {
+                    if (map[v / sz][v % sz] == 'n'&& !PPoss.contains(v)) {
                         int alt = dist[u.Pos()] + 1;
                         if (alt < dist[v]) {
                             dist[v] = alt;
@@ -172,12 +173,30 @@ public class Dijkstra {
         }
     }
 
-    public ArrayList<Integer> getPath(int source, int dest) {
+    public ArrayList<Integer> getPath(int source, int dest,int[] pposArrays) {
         ArrayList<Integer> path = new ArrayList<>();
+        PPoss=new ArrayList<>();
+        int tempx,tempy;
+        if(map[dest/sz][dest%sz]!='n') {
+            if(source/sz>dest/sz){
+                tempx=0;
+            }else tempx=sz-1;
+            
+            if(source%sz>dest%sz){
+                tempy=0;
+            }
+            else tempy=sz-1;
+            
+            dest=tempx*sz+tempy;
+        }
+        for(int i=0;i<pposArrays.length;i++){
+            PPoss.add(pposArrays[i]);
+            //System.out.println("Values");
+        }
         int[] preds = dijkstra(source);
         int pr, cur, count = 0;
-
-        cur = dest;
+        
+        try{cur = dest;
         pr = preds[cur];
 
         while (cur != source) {
@@ -185,6 +204,10 @@ public class Dijkstra {
             cur = pr;
             pr = preds[cur];
             count++;
+        }
+        }catch(OutOfMemoryError e){
+            path=null;
+            path=this.getPath(source, 79, pposArrays);
         }
 
         for (int i = 0; i < path.size(); i++) {
@@ -196,6 +219,6 @@ public class Dijkstra {
     public static void main(String[] args) {
         Dijkstra d = new Dijkstra(10, 0, new char[10][10]);
         //d.dijkstra(75);
-        d.getPath(75, 0);
+        //d.getPath(75, 0);
     }
 }
